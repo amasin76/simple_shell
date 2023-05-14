@@ -24,8 +24,7 @@ typedef struct command
 } command;
 
 /* main */
-void execute_command(char **args, int *status,
-					 command *builtins, int num_builtins);
+void execute_command(char **args, int *status);
 
 /* _printf */
 void _printf(const char *fmt, ...);

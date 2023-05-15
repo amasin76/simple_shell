@@ -3,3 +3,4 @@ hsh
 *.out
 
 .vscode/
+simple_shell_pre_perso/main.c

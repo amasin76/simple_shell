@@ -4,16 +4,24 @@
  * cmd_exit - exits the program
  * @args: command line arguments
  */
+
 static void cmd_exit(char **args)
 {
-	(void)(args);
-	exit(0);
+	int status;
+
+	if (args[1] != NULL)
+	{
+		status = _atoi(args[1]);
+		exit(status);
+	} else
+		exit(0);
 }
 
 /**
  * cmd_env - prints the current environment
  * @args: command line arguments
  */
+
 static void cmd_env(char **args)
 {
 	uint i;
@@ -37,6 +45,7 @@ static command builtins[] = {
  * num_builtins - Calculates the number of built-in commands
  * Return: Count of built-in commands
  */
+
 int num_builtins(void)
 {
 	return (sizeof(builtins) / sizeof(command));

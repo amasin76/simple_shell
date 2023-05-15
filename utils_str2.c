@@ -5,6 +5,7 @@
  * @fd: The file descriptor to write to
  * @s: The string to write
  */
+
 void write_str(int fd, char *s)
 {
 	(!s) && (s = "(null)");
@@ -16,6 +17,7 @@ void write_str(int fd, char *s)
  * @s: The string to duplicate
  * Return: Pointer to the duplicated string, or NULL if fails
  */
+
 char *_strdup(const char *s)
 {
 	int i;
@@ -40,6 +42,7 @@ char *_strdup(const char *s)
  * @fd: file descriptor
  * Return: number of bytes read, or -1 on failure
  */
+
 ssize_t _getline(char **lineptr, size_t *n, int fd)
 {
 	size_t size = 0;
@@ -80,6 +83,14 @@ ssize_t _getline(char **lineptr, size_t *n, int fd)
 		}
 	}
 }
+
+/**
+ * _strtok - Tokenizes a string by a given delimiter
+ * @str: The string to be tokenized
+ * @delim: The delimiter used for tokenization
+ *
+ * Return: A pointer to the next token in the string
+ */
 
 char *_strtok(char *str, char *delim)
 {

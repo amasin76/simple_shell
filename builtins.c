@@ -10,8 +10,27 @@ static void cmd_exit(char **args)
 	exit(0);
 }
 
+/**
+ * cmd_env - prints the current environment
+ * @args: command line arguments
+ */
+static void cmd_env(char **args)
+{
+	uint i;
+	(void)(args);
+
+	if (!environ)
+	{
+		_fprintf(STDERR_FILENO, "Error: environ is NULL\n");
+		return;
+	}
+	for (i = 0; environ[i]; i++)
+		_printf("%s\n", environ[i]);
+}
+
 static command builtins[] = {
 	{"exit", cmd_exit},
+	{"env", cmd_env},
 };
 
 /**

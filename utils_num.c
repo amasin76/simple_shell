@@ -56,3 +56,33 @@ int _itoa(long x, char s[], int base, int sign)
 	reverse_str(s);
 	return (i);
 }
+
+/**
+ * _realloc - reallocate a block of memory
+ * @ptr: pointer to the memory previously allocated
+ * @old_size: size of the memory block pointed by ptr
+ * @new_size: new size of the memory block to be allocated
+ * Return: pointer to the newly allocated memory, or NULL if it fails
+ */
+void *_realloc(void *ptr, size_t old_size, size_t new_size)
+{
+	void *new_ptr;
+
+	if (!ptr)
+		return (malloc(new_size));
+
+	if (new_size == 0)
+	{
+		free(ptr);
+		return (NULL);
+	}
+
+	new_ptr = malloc(new_size);
+	if (!new_ptr)
+		return (NULL);
+
+	_memcpy(new_ptr, ptr, old_size < new_size ? old_size : new_size);
+	free(ptr);
+
+	return (new_ptr);
+}

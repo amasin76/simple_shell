@@ -1,6 +1,7 @@
 #include "main.h"
 #include <string.h>
-#include <stdio.h>
+
+#define MAX_ARGS 128
 
 /**
  * read_line - reads a line from stdin
@@ -12,18 +13,12 @@ char *read_line(void)
 	size_t len = 0;
 	ssize_t nread;
 
-	nread = getline(&line, &len, stdin);
+	nread = _getline(&line, &len, STDIN_FILENO);
+
 	if (nread == -1)
 	{
-		if (feof(stdin))
-		{
-			return (NULL);
-		}
-		else
-		{
-			_fprintf(STDERR_FILENO, "Error: read failed\n");
-			exit(EXIT_FAILURE);
-		}
+		free(line);
+		return (NULL);
 	}
 
 	if (nread > 0 && line[nread - 1] == '\n')
@@ -39,36 +34,21 @@ char *read_line(void)
  */
 char **read_input(char **input)
 {
-	int i = 0, args_size = 10;
-	char **args, **new_args;
+	int i = 0;
+	static char *args[MAX_ARGS];
 
 	*input = read_line();
 	if (*input == NULL)
 		return (NULL);
 
-	args = malloc(args_size * sizeof(char *));
-	if (args == NULL)
-	{
-		_fprintf(STDERR_FILENO, "Error: memory allocation failed\n");
-		exit(EXIT_FAILURE);
-	}
-
 	args[i] = strtok(*input, " ");
 	while (args[i])
 	{
 		i++;
-		if (i >= args_size)
+		if (i >= MAX_ARGS)
 		{
-			args_size *= 2;
-			new_args = malloc(args_size * sizeof(char *));
-			if (new_args == NULL)
-			{
-				_fprintf(STDERR_FILENO, "Error: memory allocation failed\n");
-				exit(EXIT_FAILURE);
-			}
-			_memcpy(new_args, args, i * sizeof(char *));
-			free(args);
-			args = new_args;
+			_fprintf(STDERR_FILENO, "Error: too many arguments\n");
+			exit(EXIT_FAILURE);
 		}
 		args[i] = strtok(NULL, " ");
 	}

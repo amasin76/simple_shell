@@ -67,7 +67,7 @@ void _sprintf(char *str, const char *fmt, ...)
  */
 void _fprintf(int fd, const char *fmt, ...)
 {
-	char buf[1024];
+	char buf[BUFFER_SIZE];
 	va_list ap;
 
 	va_start(ap, fmt);
@@ -84,7 +84,8 @@ void _fprintf(int fd, const char *fmt, ...)
 void _printf(const char *fmt, ...)
 {
 	va_list ap;
-	char buf[1024];
+	/* TODO: allocate buf dynamically */
+	char buf[BUFFER_SIZE];
 
 	va_start(ap, fmt);
 	_vsprintf(buf, fmt, ap);

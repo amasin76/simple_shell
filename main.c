@@ -6,22 +6,24 @@
  */
 int main(void)
 {
-	int status = 0, should_run = 1;
-	char *input = NULL, **args = NULL;
+	int should_run = 1;
+	shell sh = {NULL};
+
+	sh.builtins = get_builtins();
+	sh.num_builtins = num_builtins();
 
 	while (should_run)
 	{
 		if (isatty(STDIN_FILENO))
 			_printf("myshell> ");
 
-		args = read_input(&input);
-		if (args == NULL)
+		sh.args = read_input(&sh.input);
+		if (sh.args == NULL)
 			break;
 
-		execute_command(args, &status);
+		execute_command(&sh);
 
-		free(input);
-		free(args);
+		free(sh.input);
 	}
-	return (status);
+	return (sh.status);
 }

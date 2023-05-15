@@ -46,15 +46,18 @@ void external_command(shell *sh)
 			ret = execve(full_path, sh->args, NULL);
 			if (ret == -1)
 				perror(sh->args[0]);
-			if (full_path != sh->args[0])
-				free(full_path);
 			_exit(ret);
 		}
 		else
+		{
 			wait(&wstatus);
-		/* Get the exit status of the child */
-		if (WIFEXITED(wstatus))
-			sh->status = WEXITSTATUS(wstatus);
+			/* Get the exit status of the child */
+			if (WIFEXITED(wstatus))
+				sh->status = WEXITSTATUS(wstatus);
+		}
+		/* Free full_path in both the child and parent processes */
+		if (full_path != sh->args[0])
+			free(full_path);
 	}
 	else
 		_fprintf(STDERR_FILENO, "%s: command not found\n", sh->args[0]);

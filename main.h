@@ -65,6 +65,7 @@ command *get_builtins(void);
 int _atoi(const char *str);
 int _itoa(long n, char s[], int base, int sign);
 void *_realloc(void *ptr, size_t old_size, size_t new_size);
+
 /* utils_str */
 uint _strlen(char *s);
 void reverse_str(char s[]);
@@ -73,5 +74,6 @@ int _strcmp(const char *s1, const char *s2);
 void *_memcpy(void *dest, const void *src, size_t n);
 char *_strdup(const char *s);
 ssize_t _getline(char **lineptr, size_t *n, int fd);
+char *_strtok(char *str, char *delim);
 
 #endif

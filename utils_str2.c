@@ -80,3 +80,29 @@ ssize_t _getline(char **lineptr, size_t *n, int fd)
 		}
 	}
 }
+
+char *_strtok(char *str, char *delim)
+{
+	static char *last;
+	char *token;
+
+	if (str != NULL)
+		last = str;
+
+	if (last == NULL || *last == '\0')
+		return (NULL);
+
+	token = last;
+
+	while (*last != '\0')
+	{
+		if (*last == *delim)
+		{
+			*last = '\0';
+			last++;
+			return (token);
+		}
+		last++;
+	}
+	return (token);
+}

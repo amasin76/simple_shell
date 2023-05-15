@@ -41,7 +41,7 @@ char **read_input(char **input)
 	if (*input == NULL)
 		return (NULL);
 
-	args[i] = strtok(*input, " ");
+	args[i] = _strtok(*input, " ");
 	while (args[i])
 	{
 		i++;
@@ -50,7 +50,7 @@ char **read_input(char **input)
 			_fprintf(STDERR_FILENO, "Error: too many arguments\n");
 			exit(EXIT_FAILURE);
 		}
-		args[i] = strtok(NULL, " ");
+		args[i] = _strtok(NULL, " ");
 	}
 	return (args);
 }

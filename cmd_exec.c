@@ -14,7 +14,7 @@ int builtin_command(shell *sh)
 	{
 		if (sh->args[0] && _strcmp(sh->args[0], sh->builtins[i].name) == 0)
 		{
-			sh->builtins[i].func(sh->args);
+			sh->builtins[i].func(sh);
 			break;
 		}
 	}

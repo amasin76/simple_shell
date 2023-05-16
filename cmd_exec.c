@@ -12,7 +12,7 @@ int builtin_command(shell *sh)
 
 	for (i = 0; i < sh->num_builtins; i++)
 	{
-		if (sh->args[0] && _strcmp(sh->args[0], sh->builtins[i].name) == 0)
+		if (sh->args[0] && _strcmp(sh->args[0], sh->builtins[i].name, -1) == 0)
 		{
 			sh->builtins[i].func(sh);
 			break;

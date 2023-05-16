@@ -36,55 +36,6 @@ char *_strdup(const char *s)
 }
 
 /**
- * _getline - reads a line from a file descriptor
- * @lineptr: pointer to the buffer where the line is stored
- * @n: size of the buffer
- * @fd: file descriptor
- * Return: number of bytes read, or -1 on failure
- */
-
-ssize_t _getline(char **lineptr, size_t *n, int fd)
-{
-	size_t size = 0;
-	char *line = *lineptr;
-	size_t start = 0, end = 0;
-	static char buffer[BUFFER_SIZE];
-
-	for (;;)
-	{
-		if (start >= end)
-		{
-			ssize_t bytes = read(fd, buffer, BUFFER_SIZE);
-
-			if (bytes <= 0)
-				return (-1);
-			start = 0;
-			end = bytes;
-		}
-		while (start < end)
-		{
-			char c = buffer[start++];
-			char *tmp = _realloc(line, size, size + 2);
-
-			if (tmp == NULL)
-			{
-				free(line);
-				return (-1);
-			}
-			line = tmp;
-			line[size++] = c;
-			if (c == '\n')
-			{
-				line[size] = '\0';
-				*lineptr = line;
-				*n = size;
-				return (size);
-			}
-		}
-	}
-}
-
-/**
  * _strtok - Tokenizes a string by a given delimiter
  * @str: The string to be tokenized
  * @delim: The delimiter used for tokenization

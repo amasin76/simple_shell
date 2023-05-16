@@ -1,4 +1,5 @@
 #include "main.h"
+#include <stdio.h>
 
 /**
  * cmd_exit - exits the program
@@ -6,12 +7,13 @@
  */
 static void cmd_exit(shell *sh)
 {
-	free(sh->input);
+	int status = 0;
 
 	if (sh->args[1])
-		exit(_atoi(sh->args[1]));
-	else
-		exit(0);
+		status = _atoi(sh->args[1]);
+
+	free(sh->input);
+	exit(status);
 }
 
 /**
@@ -32,25 +34,41 @@ static void cmd_env(shell *sh)
 		_printf("%s\n", environ[i]);
 }
 
-static command builtins[] = {
-	{"exit", cmd_exit},
-	{"env", cmd_env},
-};
-
 /**
- * num_builtins - Calculates the number of built-in commands
- * Return: Count of built-in commands
+ * cmd_cd - Change the current working directory
+ * @sh: Pointer to the shell structure
  */
-int num_builtins(void)
+static void cmd_cd(shell *sh)
 {
-	return (sizeof(builtins) / sizeof(command));
+	char buf[BUFFER_SIZE];
+	char *new_dir, *old_dir;
+
+	old_dir = getcwd(buf, BUFFER_SIZE);
+
+	if (!sh->args[1])
+		new_dir = _getenv("HOME");
+	else if (_strcmp(sh->args[1], "-", -1) == 0)
+	{
+		new_dir = getenv("OLDPWD");
+		_printf("%s\n", new_dir);
+	}
+	else
+		new_dir = sh->args[1];
+
+	if (chdir(new_dir) != 0)
+		perror("cd");
+
+	setenv("OLDPWD", old_dir, 1);
+	setenv("PWD", getcwd(buf, BUFFER_SIZE), 1);
 }
 
-/**
- * get_builtins - Self explain
- * Return: Self explain
- */
 command *get_builtins(void)
 {
+	static command builtins[] = {
+		{"exit", cmd_exit},
+		{"env", cmd_env},
+		{"cd", cmd_cd},
+		{NULL, NULL},
+	};
 	return (builtins);
 }

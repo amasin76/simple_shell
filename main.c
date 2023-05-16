@@ -9,8 +9,7 @@ int main(void)
 	int should_run = 1;
 	shell sh = {NULL};
 
-	sh.builtins = get_builtins();
-	sh.num_builtins = num_builtins();
+	init_builtins(&sh);
 
 	while (should_run)
 	{
@@ -26,4 +25,20 @@ int main(void)
 		free(sh.input);
 	}
 	return (sh.status);
+}
+
+/**
+ * init_builtins - Initialize the built-in commands for a shell
+ * @sh: Pointer to the shell structure
+ */
+void init_builtins(shell *sh)
+{
+	command *builtins = get_builtins();
+
+	sh->builtins = builtins;
+	sh->num_builtins = 0;
+
+	/* calculate the number of built-in commands */
+	while (builtins[sh->num_builtins].name)
+		sh->num_builtins++;
 }

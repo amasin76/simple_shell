@@ -44,23 +44,31 @@ struct shell
 extern char **environ;
 
 /* main */
+void init_builtins(shell *sh);
+
+/* input */
+char *read_line(void);
+char **read_input(char **input);
+
+/* builtins */
+command *get_builtins(void);
+
+/* cmd_exec */
 void execute_command(shell *sh);
+
+/* find_cmd */
+char *find_command(char *command);
+
+/* builtins */
 
 /* _printf */
 void _printf(const char *fmt, ...);
 void _fprintf(int fd, const char *fmt, ...);
 void _sprintf(char *str, const char *fmt, ...);
 
-/* input */
-char *read_line(void);
-char **read_input(char **input);
-
-/* find_cmd */
-char *find_command(char *command);
-
-/* builtins */
-int num_builtins(void);
-command *get_builtins(void);
+/* utils_sys */
+ssize_t _getline(char **lineptr, size_t *n, int fd);
+char *_getenv(const char *name);
 
 /* utils_num */
 int _atoi(const char *str);
@@ -71,10 +79,9 @@ void *_realloc(void *ptr, size_t old_size, size_t new_size);
 uint _strlen(char *s);
 void reverse_str(char s[]);
 int _stoa(char *s, char *buf);
-int _strcmp(const char *s1, const char *s2);
+int _strcmp(const char *s1, const char *s2, size_t n);
 void *_memcpy(void *dest, const void *src, size_t n);
 char *_strdup(const char *s);
-ssize_t _getline(char **lineptr, size_t *n, int fd);
 char *_strtok(char *str, char *delim);
 
 #endif

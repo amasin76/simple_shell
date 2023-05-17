@@ -10,7 +10,7 @@
  */
 char *find_command(char *command)
 {
-	char *path = getenv("PATH");
+	char *path = _getenv("PATH");
 	char *path_copy = _strdup(path);
 	char *dir = _strtok(path_copy, ":");
 	char *full_path = malloc(_strlen(command) + _strlen(path) + 2);

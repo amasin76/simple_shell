@@ -58,6 +58,40 @@ void update_environment(char *env_var)
 }
 
 /**
+ * remove_environment - removes an environment variable from the system
+ * @name: the name of the environment variable to be removed
+ */
+void remove_environment(char *name)
+{
+	int index = find_environment(name);
+
+	/* If the environment variable is not found, return */
+	if (index == -1)
+		return;
+
+	free(environ[index]);
+
+	/* Shift the remaining environment variables up by one */
+	for (; environ[index] != NULL; index++)
+		environ[index] = environ[index + 1];
+}
+
+/**
+ * cmd_unsetenv - unsets an environment variable
+ * @sh: pointer to the shell structure
+ */
+void cmd_unsetenv(shell *sh)
+{
+	if (sh->args[1] == NULL)
+	{
+		_fprintf(STDERR_FILENO, "Usage: unsetenv VARIABLE\n");
+		return;
+	}
+
+	remove_environment(sh->args[1]);
+}
+
+/**
  * cmd_setenv - sets an environment variable
  * @sh: pointer to the shell structure
  */

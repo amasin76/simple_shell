@@ -52,6 +52,7 @@ char **read_input(char **input);
 
 /* builtins */
 void cmd_setenv(shell *sh);
+void cmd_unsetenv(shell *sh);
 command *get_builtins(void);
 
 /* cmd_exec */

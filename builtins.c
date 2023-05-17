@@ -49,7 +49,7 @@ static void cmd_cd(shell *sh)
 		new_dir = _getenv("HOME");
 	else if (_strcmp(sh->args[1], "-", -1) == 0)
 	{
-		new_dir = getenv("OLDPWD");
+		new_dir = _getenv("OLDPWD");
 		_printf("%s\n", new_dir);
 	}
 	else
@@ -68,6 +68,7 @@ command *get_builtins(void)
 		{"exit", cmd_exit},
 		{"env", cmd_env},
 		{"cd", cmd_cd},
+		{"setenv", cmd_setenv},
 		{NULL, NULL},
 	};
 	return (builtins);

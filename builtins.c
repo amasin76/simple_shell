@@ -62,6 +62,26 @@ static void cmd_cd(shell *sh)
 	setenv("PWD", getcwd(buf, BUFFER_SIZE), 1);
 }
 
+/**
+ * cmd_setenv - Set or update the value of an environment variable
+ * @sh: Pointer to the shell structure
+ */
+static void cmd_setenv(shell *sh)
+{
+	int result;
+
+	if (sh->args[1] == NULL || sh->args[2] == NULL)
+	{
+		_fprintf(STDERR_FILENO, "Usage: setenv VARIABLE VALUE\n");
+		return;
+	}
+
+	result = _setenv(sh->args[1], sh->args[2], 1);
+
+	if (result == -1)
+		_fprintf(STDERR_FILENO, "Failed to set environment variable\n");
+}
+
 command *get_builtins(void)
 {
 	static command builtins[] = {

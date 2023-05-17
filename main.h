@@ -60,7 +60,7 @@ void execute_command(shell *sh);
 char *find_command(char *command);
 
 /* builtins */
-int cmd_setenv(const char *name, const char *value, int overwrite);
+int _setenv(const char *name, const char *value, int overwrite);
 
 /* _printf */
 void _printf(const char *fmt, ...);

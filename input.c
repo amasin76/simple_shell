@@ -35,13 +35,23 @@ char *read_line(void)
 char **read_input(char **input)
 {
 	int i = 0;
+	char *cmd;
 	static char *args[MAX_ARGS];
 
 	*input = read_line();
 	if (*input == NULL)
 		return (NULL);
 
-	args[i] = _strtok(*input, " ");
+	cmd = *input;
+	/* Ignore leading space characters */
+	while (*cmd == ' ' || *cmd == '\t')
+		cmd++;
+
+	/* Check if the command is empty */
+	if (*cmd == '\0')
+		return (NULL);
+
+	args[i] = _strtok(cmd, " ");
 	while (args[i])
 	{
 		i++;

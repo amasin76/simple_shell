@@ -36,8 +36,8 @@ struct shell
 {
 	char *input;
 	char **args;
-	command *builtins;
 	int num_builtins;
+	command *builtins;
 	int status;
 };
 
@@ -51,6 +51,7 @@ char *read_line(void);
 char **read_input(char **input);
 
 /* builtins */
+void cmd_setenv(shell *sh);
 command *get_builtins(void);
 
 /* cmd_exec */
@@ -60,7 +61,8 @@ void execute_command(shell *sh);
 char *find_command(char *command);
 
 /* builtins */
-int _setenv(const char *name, const char *value, int overwrite);
+void cmd_setenv(shell *sh);
+void cmd_unsetenv(shell *sh);
 
 /* _printf */
 void _printf(const char *fmt, ...);
@@ -70,6 +72,7 @@ void _sprintf(char *str, const char *fmt, ...);
 /* utils_sys */
 ssize_t _getline(char **lineptr, size_t *n, int fd);
 char *_getenv(const char *name);
+char **copy_environ(void);
 
 /* utils_num */
 int _atoi(const char *str);

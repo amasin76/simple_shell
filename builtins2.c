@@ -5,21 +5,43 @@
 #include <unistd.h>
 
 /**
- * update_environment - Update the environment with the new variable
- * @env_var: The new environment variable string
- * @env: Pointer to the environment variable array
+ * find_environment - finds the index of an env variable in the environ
+ * @name: the name of the environment variable to search for
+ * Return: the index of the environment variable, or -1 if not found.
  */
+int find_environment(char *name)
+{
+	char **env;
+	int index = 0;
+	size_t name_len = _strlen(name);
 
-void update_environment(char *env_var, char **env)
+	for (env = environ; *env != NULL; env++, index++)
+		/* Compare the environment variable name with the given name */
+		if (_strcmp(*env, name, name_len) == 0 && (*env)[name_len] == '=')
+			return (index);
+
+	return (-1);
+}
+
+/**
+ * update_environment - updates the environment variables
+ * @env_var: the new environment variable to add
+ */
+void update_environment(char *env_var)
 {
 	size_t env_count = 0;
-	char **env_ptr = env;
-	char **new_environ;
+	size_t old_size, new_size;
+	char **new_environ, **env_ptr, **copy;
 
-	while (*env_ptr++)
+	/* Count the number of environment variables */
+	for (env_ptr = environ; *env_ptr; env_ptr++)
 		env_count++;
 
-	new_environ = realloc(env, (env_count + 2) * sizeof(char *));
+	old_size = env_count * sizeof(char *);
+	new_size = (env_count + 2) * sizeof(char *);
+	copy = copy_environ();
+	new_environ = _realloc(copy, old_size, new_size);
+
 	if (new_environ == NULL)
 	{
 		_fprintf(STDERR_FILENO, "Failed to allocate memory\n");
@@ -27,61 +49,43 @@ void update_environment(char *env_var, char **env)
 		return;
 	}
 
-	env = new_environ;
-	env[env_count] = env_var;
-	env[env_count + 1] = NULL;
+	/* Set the environ variable to point to the newly allocated memory */
+	environ = new_environ;
+	/* Add the new environment variable to the end of the array */
+	environ[env_count] = env_var;
+	/* Set the last element of the array to NULL */
+	environ[env_count + 1] = NULL;
 }
 
 /**
- * _setenv - Set or update the value of an environment variable
- * @name: The name of the environment variable
- * @value: The value to set for the environment variable
- * @overwrite: Flag indicating whether to overwrite an existing variable
- *
- * Return: On success, return 0. On failure, return -1.
+ * cmd_setenv - sets an environment variable
+ * @sh: pointer to the shell structure
  */
-
-int _setenv(const char *name, const char *value, int overwrite)
+void cmd_setenv(shell *sh)
 {
-	char **env;
-	size_t name_len = _strlen((char *)name);
-	size_t value_len = _strlen((char *)value);
-	size_t env_var_len = name_len + value_len + 2; /* +2 for '=' and '\0' */
-	char *env_var = malloc(env_var_len);
+	char *env_var;
+	size_t name_len, value_len, env_var_len;
 
-	if (name == NULL || value == NULL)
+	if (!sh->args[1] || !sh->args[2])
 	{
-		_fprintf(STDERR_FILENO, "Usage: _setenv VARIABLE VALUE\n");
-		return (-1);
+		_fprintf(STDERR_FILENO, "Usage: setenv VARIABLE VALUE\n");
+		return;
 	}
 
-	for (env = environ; *env != NULL; env++)
-	{
-		if (_strcmp(*env, name, name_len) == 0 && (*env)[name_len] == '=')
-		{
-			if (overwrite == 0)
-				return (0);
-			break;
-		}
-	}
+	name_len = _strlen(sh->args[1]);
+	value_len = _strlen(sh->args[2]);
 
-	if (env_var == NULL)
+	/* +2 for '=' and '\0' */
+	env_var_len = name_len + value_len + 2;
+	env_var = malloc(env_var_len);
+
+	if (!env_var)
 	{
 		_fprintf(STDERR_FILENO, "Failed to allocate memory\n");
-		return (-1);
+		return;
 	}
+	_sprintf(env_var, "%s=%s", sh->args[1], sh->args[2]);
 
-	_sprintf(env_var, "%s=%s", name, value);
-
-	if (*env == NULL)
-		update_environment(env_var, env);
-	else
-	{
-		free(*env);
-		*env = env_var;
-	}
-
-	return (0);
+	if (find_environment(sh->args[1]) == -1)
+		update_environment(env_var);
 }
-
-/*To DO: unsetenv*/

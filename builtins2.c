@@ -1,8 +1,4 @@
 #include "main.h"
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <unistd.h>
 
 /**
  * find_environment - finds the index of an env variable in the environ
@@ -25,22 +21,22 @@ int find_environment(char *name)
 
 /**
  * update_environment - updates the environment variables
+ * @sh: pointer to the shell structure
  * @env_var: the new environment variable to add
  */
-void update_environment(char *env_var)
+void update_environment(shell *sh, char *env_var)
 {
 	size_t env_count = 0;
 	size_t old_size, new_size;
-	char **new_environ, **env_ptr, **copy;
+	char **new_environ, **env_ptr;
 
 	/* Count the number of environment variables */
-	for (env_ptr = environ; *env_ptr; env_ptr++)
+	for (env_ptr = sh->environ_copy; *env_ptr; env_ptr++)
 		env_count++;
 
 	old_size = env_count * sizeof(char *);
 	new_size = (env_count + 2) * sizeof(char *);
-	copy = copy_environ();
-	new_environ = _realloc(copy, old_size, new_size);
+	new_environ = _realloc(sh->environ_copy, old_size, new_size);
 
 	if (new_environ == NULL)
 	{
@@ -49,31 +45,37 @@ void update_environment(char *env_var)
 		return;
 	}
 
-	/* Set the environ variable to point to the newly allocated memory */
-	environ = new_environ;
+	/* Set the environ_copy variable to point to the newly allocated memory */
+	sh->environ_copy = new_environ;
 	/* Add the new environment variable to the end of the array */
-	environ[env_count] = env_var;
+	sh->environ_copy[env_count] = env_var;
 	/* Set the last element of the array to NULL */
-	environ[env_count + 1] = NULL;
+	sh->environ_copy[env_count + 1] = NULL;
+
+	/* Update the global environ variable */
+	environ = sh->environ_copy;
 }
 
 /**
  * remove_environment - removes an environment variable from the system
- * @name: the name of the environment variable to be removed
+ * @sh: pointer to the shell structure
  */
-void remove_environment(char *name)
+void remove_environment(shell *sh)
 {
-	int index = find_environment(name);
+	int index = find_environment(sh->args[1]);
 
 	/* If the environment variable is not found, return */
 	if (index == -1)
 		return;
 
-	free(environ[index]);
+	free(sh->environ_copy[index]);
 
 	/* Shift the remaining environment variables up by one */
-	for (; environ[index] != NULL; index++)
-		environ[index] = environ[index + 1];
+	for (; sh->environ_copy[index] != NULL; index++)
+		sh->environ_copy[index] = sh->environ_copy[index + 1];
+
+	/* Update the global environ variable */
+	environ = sh->environ_copy;
 }
 
 /**
@@ -88,7 +90,7 @@ void cmd_unsetenv(shell *sh)
 		return;
 	}
 
-	remove_environment(sh->args[1]);
+	remove_environment(sh);
 }
 
 /**
@@ -121,5 +123,11 @@ void cmd_setenv(shell *sh)
 	_sprintf(env_var, "%s=%s", sh->args[1], sh->args[2]);
 
 	if (find_environment(sh->args[1]) == -1)
-		update_environment(env_var);
+	{
+		/* If environ_copy has not been initialized yet */
+		if (sh->environ_copy == NULL)
+			copy_environ(sh);
+
+		update_environment(sh, env_var);
+	}
 }

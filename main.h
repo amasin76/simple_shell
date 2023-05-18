@@ -31,6 +31,7 @@ typedef struct command
  * @builtins: A pointer to an array of containing about the builtin commands
  * @num_builtins: The number of builtin commands
  * @status: The exit status of the last command executed
+ * @environ_copy: An array of strings containing a copy of the environ.
  */
 struct shell
 {
@@ -39,12 +40,14 @@ struct shell
 	int num_builtins;
 	command *builtins;
 	int status;
+	char **environ_copy;
 };
 
 extern char **environ;
 
 /* main */
 void init_builtins(shell *sh);
+void free_shell(shell *sh);
 
 /* input */
 char *read_line(void);
@@ -73,7 +76,7 @@ void _sprintf(char *str, const char *fmt, ...);
 /* utils_sys */
 ssize_t _getline(char **lineptr, size_t *n, int fd);
 char *_getenv(const char *name);
-char **copy_environ(void);
+void copy_environ(shell *sh);
 
 /* utils_num */
 int _atoi(const char *str);

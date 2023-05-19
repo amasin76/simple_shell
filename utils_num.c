@@ -86,3 +86,17 @@ void *_realloc(void *ptr, size_t old_size, size_t new_size)
 
 	return (new_ptr);
 }
+
+/**
+ * free_double - Frees a double pointer
+ * @ptr: The double pointer to be freed
+ */
+void free_double(char ***ptr)
+{
+	int i;
+
+	for (i = 0; (*ptr)[i]; i++)
+		free((*ptr)[i]);
+	free(*ptr);
+	*ptr = NULL;
+}

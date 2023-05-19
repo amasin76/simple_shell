@@ -43,7 +43,7 @@ void external_command(shell *sh)
 		pid = fork();
 		if (pid == 0)
 		{
-			ret = execve(full_path, sh->args, NULL);
+			ret = execve(full_path, sh->args, sh->environ_copy);
 			if (ret == -1)
 				perror(sh->args[0]);
 			_exit(ret);
@@ -65,15 +65,27 @@ void external_command(shell *sh)
 
 /**
  * execute_command - Executes a command
- * @sh: Pointer to the shell structure.
+ * @sh: Pointer to the shell structure
  */
 void execute_command(shell *sh)
 {
-	int i;
+	int i, j;
 
-	i = builtin_command(sh);
+	read_input(sh);
+	if (!sh->input)
+		return;
 
-	/* If it's not a builtin command */
-	if (i == sh->num_builtins)
-		external_command(sh);
+	for (i = 0; i < sh->cmd_count; i++)
+	{
+		/* Parse the command and its arguments */
+		sh->args = parse_command(sh->commands[i]);
+
+		j = builtin_command(sh);
+		/* If it's not a builtin command */
+		if (j == sh->num_builtins)
+			external_command(sh);
+	}
+
+	free(sh->input);
+	sh->input = NULL;
 }

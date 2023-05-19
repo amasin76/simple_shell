@@ -7,13 +7,10 @@
  */
 static void cmd_exit(shell *sh)
 {
-	int status = 0;
-
 	if (sh->args[1])
-		status = _atoi(sh->args[1]);
+		sh->status = _atoi(sh->args[1]);
 
-	free_shell(sh);
-	exit(status);
+	sh->run = 0;
 }
 
 /**

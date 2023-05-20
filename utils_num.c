@@ -64,7 +64,7 @@ int _itoa(long x, char s[], int base, int sign)
  * @new_size: new size of the memory block to be allocated
  * Return: pointer to the newly allocated memory, or NULL if it fails
  */
-void *_realloc(void *ptr, size_t old_size, size_t new_size)
+void *_realloc(void *ptr, ssize_t old_size, ssize_t new_size)
 {
 	void *new_ptr;
 

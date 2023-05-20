@@ -78,14 +78,17 @@ void execute_command(shell *sh)
 	for (i = 0; i < sh->cmd_count; i++)
 	{
 		/* Parse the command and its arguments */
-		parse_command(sh, sh->commands[i]);
+		parse_command(sh, sh->input[i]);
 
 		j = builtin_command(sh);
-		/* If it's not a builtin command */
 		if (j == sh->num_builtins)
 			external_command(sh);
 	}
+	sh->cmd_count = 0;
 
-	free(sh->input);
-	sh->input = NULL;
+	free(sh->args);
+	sh->args = NULL;
+
+	if (sh->input)
+		free_double(&sh->input);
 }

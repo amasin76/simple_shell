@@ -28,9 +28,8 @@ typedef struct command
 
 /**
  * struct shell - Struct contains information about the shell environment
- * @input: A pointer to a string containing the user's input
+ * @input: An array of strings containing commands from the user input
  * @args: An array of strings containing arguments from the user input
- * @commands: An array of strings containing commands from the user input
  * @environ_copy: An array of strings containing a copy of the environ
  * @builtins: A pointer to an array of containing about the builtin commands
  * @num_builtins: The count of builtin commands
@@ -40,9 +39,8 @@ typedef struct command
  */
 struct shell
 {
-	char *input;
+	char **input;
 	char **args;
-	char **commands;
 	char **environ_copy;
 	command *builtins;
 	int num_builtins;
@@ -89,7 +87,7 @@ void copy_environ(shell *sh);
 /* utils_num */
 int _atoi(const char *str);
 int _itoa(long n, char s[], int base, int sign);
-void *_realloc(void *ptr, size_t old_size, size_t new_size);
+void *_realloc(void *ptr, ssize_t old_size, ssize_t new_size);
 void free_double(char ***ptr);
 
 /* utils_str */

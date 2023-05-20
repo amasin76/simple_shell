@@ -32,29 +32,22 @@ char *read_line(shell *sh)
  */
 void read_input(shell *sh)
 {
-	int i = 0;
 	char *cmd;
+	size_t old_size, new_size;
 
-	sh->input = read_line(sh);
-	if (!sh->input)
-		return;
-
-	cmd = sh->input;
-	/* Tokenize by semicolons and store the first command in the commands */
-	sh->commands[i] = _strtok(cmd, ";");
-
-	/* Continue tokenizing after first command succeeded */
-	while (sh->commands[i])
+	while ((cmd = read_line(sh)) != NULL)
 	{
-		i++;
-		if (i >= MAX_CMDS)
-		{
-			_fprintf(STDERR_FILENO, "Error: too many commands\n");
-			exit(EXIT_FAILURE);
-		}
-		sh->commands[i] = _strtok(NULL, ";");
+		old_size = sizeof(char *) * (sh->cmd_count + 1);
+		new_size = sizeof(char *) * (sh->cmd_count + 2);
+
+		sh->input = _realloc(sh->input, old_size, new_size);
+		sh->input[sh->cmd_count] = cmd;
+		sh->input[sh->cmd_count + 1] = NULL;
+		sh->cmd_count++;
+
+		if (isatty(STDIN_FILENO))
+			break;
 	}
-	sh->cmd_count = i;
 }
 
 /**
@@ -67,22 +60,32 @@ void parse_command(shell *sh, char *cmd)
 {
 	int i = 0;
 	char *start, *end;
-	static char *args[MAX_ARGS];
+	char **args = malloc(MAX_ARGS * sizeof(char *));
 
+	if (!args)
+	{
+		_fprintf(STDERR_FILENO, "Error: memory allocation failed\n");
+		exit(EXIT_FAILURE);
+	}
+	if (!cmd)
+	{
+		sh->args = args;
+		return;
+	}
 	/* Trim the start of the command */
 	start = cmd;
 	while (*start == ' ' || *start == '\t')
 		start++;
-
 	/* Trim the end of the command */
 	end = start + _strlen(start) - 1;
 	while (end > start && (*end == ' ' || *end == '\t'))
 		end--;
-
 	/* Check if the command is empty */
 	if (start >= end)
+	{
+		sh->args = args;
 		return;
-
+	}
 	args[i] = _strtok(cmd, " ");
 	while (args[i])
 	{

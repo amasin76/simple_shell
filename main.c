@@ -32,16 +32,13 @@ void init_shell(shell *sh)
 
 	sh->builtins = builtins;
 	sh->num_builtins = 0;
+	sh->cmd_count = 0;
 	sh->status = 0;
 	sh->run = 1;
 	copy_environ(sh);
 
 	while (builtins[sh->num_builtins].name)
 		sh->num_builtins++;
-
-	sh->commands = malloc(MAX_CMDS * sizeof(char *) + 1);
-	if (!sh->commands)
-		exit(EXIT_FAILURE);
 }
 
 /**
@@ -51,11 +48,7 @@ void init_shell(shell *sh)
 void free_shell(shell *sh)
 {
 	if (sh->input)
-		free(sh->input);
-
-	/* Free the memory allocated for the commands member */
-	if (sh->commands)
-		free(sh->commands);
+		free_double(&sh->input);
 
 	/* Free the memory allocated for the environ_copy member */
 	if (sh->environ_copy)

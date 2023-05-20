@@ -36,11 +36,10 @@ void init_shell(shell *sh)
 	sh->run = 1;
 	copy_environ(sh);
 
-	/* calculate the number of built-in commands */
 	while (builtins[sh->num_builtins].name)
 		sh->num_builtins++;
 
-	sh->commands = malloc(MAX_CMDS + 1);
+	sh->commands = malloc(MAX_CMDS * sizeof(char *) + 1);
 	if (!sh->commands)
 		exit(EXIT_FAILURE);
 }

@@ -78,7 +78,7 @@ void execute_command(shell *sh)
 	for (i = 0; i < sh->cmd_count; i++)
 	{
 		/* Parse the command and its arguments */
-		sh->args = parse_command(sh->commands[i]);
+		parse_command(sh, sh->commands[i]);
 
 		j = builtin_command(sh);
 		/* If it's not a builtin command */

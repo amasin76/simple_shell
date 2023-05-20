@@ -59,21 +59,29 @@ void read_input(shell *sh)
 
 /**
  * parse_command - Parses a command string into an array of arguments
+ * @sh: Pointer to the shell structure
  * @cmd: The command string to be parsed
  * Return: Pointer to the array of arguments, or NULL if command is empty
  */
-char **parse_command(char *cmd)
+void parse_command(shell *sh, char *cmd)
 {
 	int i = 0;
+	char *start, *end;
 	static char *args[MAX_ARGS];
 
-	/* Ignore leading space characters */
-	while (*cmd == ' ' || *cmd == '\t')
-		cmd++;
+	/* Trim the start of the command */
+	start = cmd;
+	while (*start == ' ' || *start == '\t')
+		start++;
+
+	/* Trim the end of the command */
+	end = start + _strlen(start) - 1;
+	while (end > start && (*end == ' ' || *end == '\t'))
+		end--;
 
 	/* Check if the command is empty */
-	if (*cmd == '\0')
-		return (NULL);
+	if (start >= end)
+		return;
 
 	args[i] = _strtok(cmd, " ");
 	while (args[i])
@@ -86,5 +94,5 @@ char **parse_command(char *cmd)
 		}
 		args[i] = _strtok(NULL, " ");
 	}
-	return (args);
+	sh->args = args;
 }

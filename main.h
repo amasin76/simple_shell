@@ -59,7 +59,7 @@ void free_shell(shell *sh);
 
 /* input */
 void read_input(shell *sh);
-char **parse_command(char *cmd);
+void parse_command(shell *sh, char *cmd);
 
 /* builtins */
 void cmd_setenv(shell *sh);

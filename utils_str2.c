@@ -5,7 +5,6 @@
  * @fd: The file descriptor to write to
  * @s: The string to write
  */
-
 void write_str(int fd, char *s)
 {
 	(!s) && (s = "(null)");
@@ -17,7 +16,6 @@ void write_str(int fd, char *s)
  * @s: The string to duplicate
  * Return: Pointer to the duplicated string, or NULL if fails
  */
-
 char *_strdup(const char *s)
 {
 	int i;
@@ -39,32 +37,46 @@ char *_strdup(const char *s)
  * _strtok - Tokenizes a string by a given delimiter
  * @str: The string to be tokenized
  * @delim: The delimiter used for tokenization
- *
  * Return: A pointer to the next token in the string
  */
-
 char *_strtok(char *str, char *delim)
 {
-	static char *last;
-	char *token;
+	int i;
+	char *curr;
+	static char *next;
 
-	if (str != NULL)
-		last = str;
+	(str) ? (curr = str) : (curr = next);
 
-	if (last == NULL || *last == '\0')
+	if (!curr)
 		return (NULL);
-
-	token = last;
-
-	while (*last != '\0')
+	/* Skip leading delimiters */
+	while (*curr)
 	{
-		if (*last == *delim)
-		{
-			*last = '\0';
-			last++;
-			return (token);
-		}
-		last++;
+		for (i = 0; delim[i]; i++)
+			if (*curr == delim[i])
+				break;
+
+		if (!delim[i])
+			break;
+		curr++;
 	}
-	return (token);
+	if (!*curr)
+		return (NULL);
+	/* Find the end of the token */
+	next = curr;
+	while (*next)
+	{
+		for (i = 0; delim[i]; i++)
+			if (*next == delim[i])
+				break;
+		if (delim[i])
+			break;
+		next++;
+	}
+	if (*next)
+	{
+		*next = '\0';
+		next++;
+	}
+	return (curr);
 }

@@ -9,6 +9,7 @@
 #include <fcntl.h>
 
 #define BUFFER_SIZE 2048
+#define ALIASES_SIZE 100
 #define MAX_CMDS 10
 #define MAX_ARGS 10
 
@@ -27,6 +28,17 @@ typedef struct command
 } command;
 
 /**
+ * struct alias - Struct for storing an alias name and value
+ * @name: Pointer to the alias name
+ * @value: Pointer to the alias value
+ */
+typedef struct alias
+{
+	char *name;
+	char *value;
+} alias;
+
+/**
  * struct shell - Struct contains information about the shell environment
  * @input: An array of strings containing commands from the user input
  * @args: An array of strings containing arguments from the user input
@@ -36,17 +48,19 @@ typedef struct command
  * @cmd_count: The count of commands in the user input
  * @status: The exit status of the last command executed
  * @run: A boolean whether or not the shell should continue running
+ * @aliases: An array of alias structures containing user-defined aliases
  */
 struct shell
 {
 	char **input;
 	char **args;
 	char **environ_copy;
-	command *builtins;
 	int num_builtins;
 	int cmd_count;
 	int status;
 	int run;
+	command *builtins;
+	alias aliases[ALIASES_SIZE];
 };
 
 extern char **environ;
@@ -63,16 +77,18 @@ void parse_command(shell *sh, char *cmd);
 void cmd_setenv(shell *sh);
 void cmd_unsetenv(shell *sh);
 command *get_builtins(void);
+char *get_alias_value(shell *sh, char *name);
 
 /* cmd_exec */
 void execute_command(shell *sh);
 
-/* find_cmd */
+/* cmd_find */
 char *find_command(char *command);
 
 /* builtins */
 void cmd_setenv(shell *sh);
 void cmd_unsetenv(shell *sh);
+void cmd_alias(shell *sh);
 
 /* _printf */
 void _printf(const char *fmt, ...);
@@ -98,5 +114,6 @@ int _strcmp(const char *s1, const char *s2, size_t n);
 void *_memcpy(void *dest, const void *src, size_t n);
 char *_strdup(const char *s);
 char *_strtok(char *str, char *delim);
+char *_strtok_r(char *str, const char *delim, char **saveptr);
 
 #endif

@@ -59,6 +59,10 @@ static void cmd_cd(shell *sh)
 	setenv("PWD", getcwd(buf, BUFFER_SIZE), 1);
 }
 
+/**
+ * get_builtins - Returns an array of builtin commands
+ * Return: Pointer to the array of builtin commands
+ */
 command *get_builtins(void)
 {
 	static command builtins[] = {
@@ -67,6 +71,7 @@ command *get_builtins(void)
 		{"cd", cmd_cd},
 		{"setenv", cmd_setenv},
 		{"unsetenv", cmd_unsetenv},
+		{"alias", cmd_alias},
 		{NULL, NULL},
 	};
 	return (builtins);

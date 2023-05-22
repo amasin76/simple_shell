@@ -39,6 +39,7 @@ static void cmd_cd(shell *sh)
 {
 	char buf[BUFFER_SIZE];
 	char *new_dir, *old_dir;
+	char *oldpwd_var, *pwd_var;
 
 	old_dir = getcwd(buf, BUFFER_SIZE);
 
@@ -55,8 +56,17 @@ static void cmd_cd(shell *sh)
 	if (chdir(new_dir) != 0)
 		perror("cd");
 
-	setenv("OLDPWD", old_dir, 1);
-	setenv("PWD", getcwd(buf, BUFFER_SIZE), 1);
+	/* Allocate memory for new environment variables */
+	oldpwd_var = malloc(100);
+	pwd_var = malloc(100);
+
+	/* Create new environment variables */
+	_sprintf(oldpwd_var, "OLDPWD=%s", old_dir);
+	_sprintf(pwd_var, "PWD=%s", getcwd(buf, BUFFER_SIZE));
+
+	/* Update environment */
+	update_environment(sh, oldpwd_var);
+	update_environment(sh, pwd_var);
 }
 
 /**

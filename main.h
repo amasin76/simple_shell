@@ -40,18 +40,23 @@ typedef struct alias
 
 /**
  * struct shell - Struct contains information about the shell environment
+ * @argc: The number of arguments passed to the program
+ * @argv: An array of strings containing the arguments passed to the program
  * @input: An array of strings containing commands from the user input
  * @args: An array of strings containing arguments from the user input
  * @environ_copy: An array of strings containing a copy of the environ
- * @builtins: A pointer to an array of containing about the builtin commands
  * @num_builtins: The count of builtin commands
  * @cmd_count: The count of commands in the user input
  * @status: The exit status of the last command executed
  * @run: A boolean whether or not the shell should continue running
+ * @interactive: A boolean whether the program is running interactively or not
+ * @builtins: A pointer to an array of containing about the builtin commands
  * @aliases: An array of alias structures containing user-defined aliases
  */
 struct shell
 {
+	int argc;
+	char **argv;
 	char **input;
 	char **args;
 	char **environ_copy;
@@ -59,6 +64,7 @@ struct shell
 	int cmd_count;
 	int status;
 	int run;
+	int interactive;
 	command *builtins;
 	alias aliases[ALIASES_SIZE];
 };
@@ -66,7 +72,7 @@ struct shell
 extern char **environ;
 
 /* main */
-void init_shell(shell *sh);
+void init_shell(shell *sh, int argc, char **argv);
 void free_shell(shell *sh);
 
 /* input */
@@ -95,7 +101,7 @@ void _sprintf(char *str, const char *fmt, ...);
 /* utils_sys */
 ssize_t _getline(char **lineptr, size_t *n, int fd);
 char *_getenv(const char *name);
-void copy_environ(shell *sh);
+char **copy_environ(void);
 
 /* utils_num */
 int _atoi(const char *str);

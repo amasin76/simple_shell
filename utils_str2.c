@@ -12,6 +12,21 @@ void write_str(int fd, char *s)
 }
 
 /**
+ * _strchr - searches for a character in a string
+ * @s: pointer to the string to search
+ * @c: character to search for
+ * Return: Pointer to the first occurrence of c in s, or NULL if not found
+ */
+char *_strchr(char *s, int c)
+{
+	while (*s != (char)c)
+		if (!*s++)
+			return (0);
+
+	return (s);
+}
+
+/**
  * _strdup - Duplicates a string
  * @s: The string to duplicate
  * Return: Pointer to the duplicated string, or NULL if fails
@@ -41,43 +56,37 @@ char *_strdup(const char *s)
  */
 char *_strtok(char *str, char *delim)
 {
-	int i;
-	char *curr;
 	static char *next;
-
-	(str) ? (curr = str) : (curr = next);
+	char *curr = str ? str : next;
 
 	if (!curr)
 		return (NULL);
-	/* Skip leading delimiters */
-	while (*curr)
-	{
-		for (i = 0; delim[i]; i++)
-			if (*curr == delim[i])
-				break;
 
-		if (!delim[i])
-			break;
+	while (*curr && _strchr(delim, *curr))
 		curr++;
-	}
 	if (!*curr)
 		return (NULL);
-	/* Find the end of the token */
+
 	next = curr;
 	while (*next)
 	{
-		for (i = 0; delim[i]; i++)
-			if (*next == delim[i])
-				break;
-		if (delim[i])
+		if (*next == '"')
+		{
+			next++;
+			while (*next && *next != '"')
+				next++;
+			if (*next == '"')
+				next++;
+		}
+		else if (_strchr(delim, *next))
+		{
 			break;
-		next++;
+		}
+		else
+			next++;
 	}
 	if (*next)
-	{
-		*next = '\0';
-		next++;
-	}
+		*next++ = '\0';
 	return (curr);
 }
 

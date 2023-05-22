@@ -60,7 +60,10 @@ void external_command(shell *sh)
 			free(full_path);
 	}
 	else
+	{
 		_fprintf(STDERR_FILENO, "%s: command not found\n", sh->args[0]);
+		sh->status = 127;
+	}
 }
 
 /**

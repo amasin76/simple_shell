@@ -76,6 +76,8 @@ void parse_command(shell *sh, char *cmd);
 /* builtins */
 void cmd_setenv(shell *sh);
 void cmd_unsetenv(shell *sh);
+void cmd_alias(shell *sh);
+void update_environment(shell *sh, char *env_var);
 command *get_builtins(void);
 char *get_alias_value(shell *sh, char *name);
 
@@ -84,11 +86,6 @@ void execute_command(shell *sh);
 
 /* cmd_find */
 char *find_command(char *command);
-
-/* builtins */
-void cmd_setenv(shell *sh);
-void cmd_unsetenv(shell *sh);
-void cmd_alias(shell *sh);
 
 /* _printf */
 void _printf(const char *fmt, ...);
@@ -112,6 +109,7 @@ void reverse_str(char s[]);
 int _stoa(char *s, char *buf);
 int _strcmp(const char *s1, const char *s2, size_t n);
 void *_memcpy(void *dest, const void *src, size_t n);
+char *_strchr(char *s, int c);
 char *_strdup(const char *s);
 char *_strtok(char *str, char *delim);
 char *_strtok_r(char *str, const char *delim, char **saveptr);

@@ -89,6 +89,7 @@ char *get_alias_value(shell *sh, char *name);
 
 /* cmd_exec */
 void execute_command(shell *sh);
+void process_command(shell *sh);
 
 /* cmd_find */
 char *find_command(char *command);

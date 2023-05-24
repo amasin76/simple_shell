@@ -9,13 +9,23 @@ static void cmd_exit(shell *sh)
 {
 	if (sh->args[1])
 	{
+		if (!is_number(sh->args[1]))
+		{
+			_fprintf(STDERR_FILENO, "exit: %s: numeric required\n",
+					 sh->args[1]);
+			sh->status = 2;
+			return;
+		}
+
+		if (sh->args[2])
+		{
+			_fprintf(STDERR_FILENO, "exit: too many arguments\n");
+			sh->status = 1;
+			return;
+		}
+
 		if (is_number(sh->args[1]))
 			sh->status = _atoi(sh->args[1]);
-		else
-		{
-			_fprintf(STDERR_FILENO, "%s: numeric required\n", sh->args[1]);
-			sh->status = 2;
-		}
 	}
 
 	sh->run = 0;

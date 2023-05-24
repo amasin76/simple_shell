@@ -12,6 +12,7 @@
 #define ALIASES_SIZE 100
 #define MAX_CMDS 10
 #define MAX_ARGS 10
+#define SH_NAME "hsh"
 
 typedef unsigned int uint;
 typedef struct shell shell;
@@ -88,7 +89,7 @@ command *get_builtins(void);
 char *get_alias_value(shell *sh, char *name);
 
 /* cmd_exec */
-void execute_command(shell *sh);
+void execute_command(shell *sh, int *curr_line);
 void process_command(shell *sh);
 
 /* cmd_find */

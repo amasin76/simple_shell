@@ -1,6 +1,25 @@
 #include "main.h"
 
 /**
+ * is_number - Checks if a given string is a valid number
+ * @str: The string to check
+ * Return: 1 if the string is a number, otherwise 0
+ */
+int is_number(char *str)
+{
+	int i = 0;
+
+	if (str[0] == '-' || str[0] == '+')
+		i++;
+
+	for (; str[i]; i++)
+		if (str[i] >= '0' && str[i] <= '9')
+			return (1);
+
+	return (0);
+}
+
+/**
  * _atoi - convert a string of digits into an integer
  * @str: the string to be converted
  * Return: the converted integer

@@ -8,7 +8,15 @@
 static void cmd_exit(shell *sh)
 {
 	if (sh->args[1])
-		sh->status = _atoi(sh->args[1]);
+	{
+		if (is_number(sh->args[1]))
+			sh->status = _atoi(sh->args[1]);
+		else
+		{
+			_fprintf(STDERR_FILENO, "%s: numeric required\n", sh->args[1]);
+			sh->status = 2;
+		}
+	}
 
 	sh->run = 0;
 }
@@ -24,7 +32,7 @@ static void cmd_env(shell *sh)
 
 	if (!environ)
 	{
-		_fprintf(STDERR_FILENO, "Error: environ is NULL\n");
+		_fprintf(STDERR_FILENO, "env: environ is NULL\n");
 		return;
 	}
 	for (i = 0; environ[i]; i++)

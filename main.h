@@ -105,6 +105,7 @@ char *_getenv(const char *name);
 char **copy_environ(void);
 
 /* utils_num */
+int is_number(char *str);
 int _atoi(const char *str);
 int _itoa(long n, char s[], int base, int sign);
 void *_realloc(void *ptr, ssize_t old_size, ssize_t new_size);

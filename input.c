@@ -19,6 +19,7 @@ char *read_line(shell *sh, int fd)
 
 	if (nread == -1)
 	{
+		sh->status = 1;
 		sh->run = 0;
 		free(line);
 		return (NULL);
@@ -46,6 +47,7 @@ void read_input(shell *sh)
 		if (fd == -1)
 		{
 			perror("open");
+			sh->status = 127;
 			sh->run = 0;
 			return;
 		}

@@ -64,7 +64,7 @@ void external_command(shell *sh, int *curr_line)
 		if (sh->interactive)
 			_fprintf(STDERR_FILENO, "%s: command not found\n", sh->args[0]);
 		else
-			_fprintf(STDERR_FILENO, "%s: line %d: %s: command not found\n",
+			_fprintf(STDERR_FILENO, "%s: %d: %s: not found\n",
 					 SH_NAME, *curr_line, sh->args[0]);
 		sh->status = 127;
 	}

@@ -86,12 +86,12 @@ void parse_command(shell *sh, char *cmd)
 		_fprintf(STDERR_FILENO, "Error: memory allocation failed\n");
 		exit(EXIT_FAILURE);
 	}
-	if (!cmd)
+	if (!cmd || !*cmd)
 	{
 		sh->args = args;
 		return;
 	}
-	arg = _strtok(cmd, " ");
+	arg = _strtok(cmd, " \t\n\r");
 	while (arg)
 	{
 		/* Check for comment */
@@ -109,7 +109,7 @@ void parse_command(shell *sh, char *cmd)
 			_fprintf(STDERR_FILENO, "Error: too many arguments\n");
 			exit(EXIT_FAILURE);
 		}
-		arg = _strtok(NULL, " ");
+		arg = _strtok(NULL, " \t\n\r");
 	}
 	args[i] = NULL;
 	process_variables(sh, args);

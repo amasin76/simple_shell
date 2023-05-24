@@ -111,7 +111,9 @@ void process_command(shell *sh)
 		{
 			/* Parse the command and its arguments */
 			parse_command(sh, cmd);
-			execute_command(sh);
+			/* Check if sh->args[0] is NULL or an empty string */
+			if (sh->args[0] && sh->args[0][0])
+				execute_command(sh);
 			cmd = _strtok_r(NULL, oprs, &saveptr);
 		}
 	}

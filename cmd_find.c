@@ -10,10 +10,16 @@
  */
 char *find_command(char *command)
 {
-	char *path = _getenv("PATH");
-	char *path_copy = _strdup(path);
-	char *dir = _strtok(path_copy, ":");
-	char *full_path = malloc(_strlen(command) + _strlen(path) + 2);
+	char *path = NULL, *path_copy = NULL;
+	char *dir = NULL, *full_path = NULL;
+
+	path = _getenv("PATH");
+	if (!path)
+		return (NULL);
+
+	path_copy = _strdup(path);
+	dir = _strtok(path_copy, ":");
+	full_path = malloc(_strlen(command) + _strlen(path) + 2);
 
 	while (dir != NULL)
 	{

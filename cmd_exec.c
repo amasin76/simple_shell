@@ -125,6 +125,9 @@ void process_command(shell *sh)
 	}
 
 	sh->cmd_count = 0;
+
+	if (sh->args)
+		free(sh->args);
 	if (sh->input)
 		free_double(&sh->input);
 }

@@ -1,6 +1,8 @@
 #include "main.h"
 #include <stdio.h>
 
+#define LINE_SIZE 1024
+
 /**
  * _getline - reads a line from a file descriptor (EOF)
  * @lineptr: pointer to the buffer where the line is stored
@@ -13,40 +15,40 @@ ssize_t _getline(char **lineptr, size_t *n, int fd)
 	static char buffer[BUFFER_SIZE];
 	static size_t start, end;
 	char *line = *lineptr;
-	ssize_t bytes = 0, size = 0, sceid = 0;
+	ssize_t bytes = 0, size = 0, sceid = 0, line_capacity = LINE_SIZE;
 
+	if (!line)
+		line = malloc(line_capacity);
+	if (!line)
+		return (-1);
 	for (;;)
 	{
 		if (start >= end)
 		{
 			bytes = read(fd, buffer, BUFFER_SIZE);
 			if (bytes <= 0 && size > 0 && line[size - 1] != '\n')
-			{
-				line = _realloc(line, size, size + 2);
-				if (!line)
-					return (-1);
 				line[size++] = '\n';
-			}
 			else if (bytes <= 0)
 				return (-1);
-			start = 0;
-			end = bytes;
+			start = 0, end = bytes;
 		}
 		while (start < end)
 		{
 			sceid = buffer[start++];
-			line = _realloc(line, size, size + 2);
-			if (!line)
-				return (-1);
+			if (size + 2 > line_capacity)
+			{
+				line_capacity *= 2;
+				line = _realloc(line, size, line_capacity);
+				if (!line)
+					return (-1);
+			}
 			line[size++] = sceid;
 			if (sceid == '\n')
 				break;
 		}
 		if (sceid == '\n' || bytes <= 0)
 		{
-			line[size] = '\0';
-			*lineptr = line;
-			*n = size;
+			line[size] = '\0', *lineptr = line, *n = size;
 			return (size);
 		}
 	}

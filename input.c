@@ -149,6 +149,8 @@ void process_variables(shell *sh, char **args)
 			arg_value = _getenv(args[i] + 1);
 			if (arg_value)
 				args[i] = arg_value;
+			else
+				args[i] = "";
 		}
 	}
 }

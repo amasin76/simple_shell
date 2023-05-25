@@ -139,10 +139,14 @@ void process_variables(shell *sh, char **args)
 			_sprintf(status_str, "%d", sh->status);
 			args[i] = status_str;
 		}
-		else if (_strcmp(args[i], "$$", -1) == 0)
+		else if (_strcmp(args[i], "$$", 2) == 0)
 		{
 			_sprintf(pid_str, "%d", getpid());
 			args[i] = pid_str;
+		}
+		else if (args[i][1] == '\0' || args[i][1] == ' ')
+		{
+			args[i] = "$";
 		}
 		else
 		{

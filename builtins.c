@@ -9,10 +9,10 @@ static void cmd_exit(shell *sh)
 {
 	if (sh->args[1])
 	{
-		if (!is_number(sh->args[1]))
+		if (!is_number(sh->args[1]) || sh->args[1][0] == '-')
 		{
-			_fprintf(STDERR_FILENO, "exit: %s: numeric required\n",
-					 sh->args[1]);
+			_fprintf(STDERR_FILENO, "%s: 1: exit: Illegal number: %s\n",
+					 SH_NAME, sh->args[1]);
 			sh->status = 2;
 			return;
 		}

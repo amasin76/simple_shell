@@ -12,7 +12,7 @@
 #define ALIASES_SIZE 100
 #define MAX_CMDS 10
 #define MAX_ARGS 10
-#define SH_NAME "hsh"
+#define SH_NAME "./hsh"
 
 typedef unsigned int uint;
 typedef struct shell shell;

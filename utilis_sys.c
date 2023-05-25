@@ -35,6 +35,8 @@ ssize_t _getline(char **lineptr, size_t *n, int fd)
 		while (start < end)
 		{
 			sceid = buffer[start++];
+			if (sceid == ' ' || sceid == '\t')
+				continue;
 			line = _realloc(line, size, size + 2);
 			if (!line)
 				return (-1);
@@ -44,9 +46,7 @@ ssize_t _getline(char **lineptr, size_t *n, int fd)
 		}
 		if (sceid == '\n' || bytes <= 0)
 		{
-			line[size] = '\0';
-			*lineptr = line;
-			*n = size;
+			line[size] = '\0', *lineptr = line, *n = size;
 			return (size);
 		}
 	}

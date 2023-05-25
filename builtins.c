@@ -79,7 +79,10 @@ static void cmd_cd(shell *sh)
 	else
 		new_dir = sh->args[1];
 
-	chdir(new_dir);
+	if (new_dir)
+		if (chdir(new_dir) != 0 && sh->args[1])
+			_fprintf(STDERR_FILENO, "%s: 1: cd: can't cd to %s\n",
+					 SH_NAME, sh->args[1]);
 
 	/* Allocate memory for new environment variables */
 	oldpwd_var = malloc(100);

@@ -68,13 +68,18 @@ static void cmd_cd(shell *sh)
 	else if (_strcmp(sh->args[1], "-", -1) == 0)
 	{
 		new_dir = _getenv("OLDPWD");
-		_printf("%s\n", new_dir);
+		if (new_dir)
+			_printf("%s\n", new_dir);
+		else
+		{
+			new_dir = old_dir;
+			_printf("%s\n", old_dir);
+		}
 	}
 	else
 		new_dir = sh->args[1];
 
-	if (chdir(new_dir) != 0)
-		perror("cd");
+	chdir(new_dir);
 
 	/* Allocate memory for new environment variables */
 	oldpwd_var = malloc(100);

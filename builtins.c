@@ -47,6 +47,8 @@ static void cmd_env(shell *sh)
 	}
 	for (i = 0; environ[i]; i++)
 		_printf("%s\n", environ[i]);
+
+	sh->status = 0;
 }
 
 /**

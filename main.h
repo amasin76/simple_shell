@@ -8,10 +8,10 @@
 #include <sys/wait.h>
 #include <fcntl.h>
 
-#define BUFFER_SIZE 2048
-#define ALIASES_SIZE 100
 #define MAX_CMDS 10
 #define MAX_ARGS 10
+#define BUFFER_SIZE 2048
+#define ALIASES_SIZE 100
 #define SH_NAME "./hsh"
 
 typedef unsigned int uint;

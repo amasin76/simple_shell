@@ -121,7 +121,10 @@ void process_command(shell *sh)
 			if (sh->args[0] && sh->args[0][0])
 				execute_command(sh, &curr_line);
 
-			/* Check if the next operator is && and the previous cmd failed */
+			/* Check for || and previous cmd success */
+			if (saveptr[0] == '|' && sh->status == 0)
+				break;
+			/* Check for && and previous cmd failed */
 			if (saveptr[0] == '&' && sh->status != 0)
 				break;
 

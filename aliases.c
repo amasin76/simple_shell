@@ -92,7 +92,7 @@ void cmd_alias(shell *sh)
 {
 	int i = 1, index, j;
 	char name[ALIASES_SIZE];
-	char *arg, *value, *equal_sign = NULL;
+	char *arg, *value, *equal_sign;
 
 	/* Use an early return if the first argument is NULL */
 	if (sh->args[i] == NULL)
@@ -104,6 +104,7 @@ void cmd_alias(shell *sh)
 	for (; sh->args[i] != NULL; i++)
 	{
 		arg = sh->args[i];
+		equal_sign = NULL;
 		/* Search for the '=' character in arg */
 		for (index = 0; arg[index] != '\0'; index++)
 		{
